@@ -111,12 +111,8 @@ html_theme_options = {
     "github_banner": True,
     "show_powered_by": False,
     "extra_nav_links": {
-        "inveniordm-py@GitHub": (
-            "https://github.com/inveniosoftware/inveniordm-py"
-        ),
-        "inveniordm-py@PyPI": (
-            "https://pypi.python.org/pypi/inveniordm-py/"
-        ),
+        "inveniordm-py@GitHub": ("https://github.com/inveniosoftware/inveniordm-py"),
+        "inveniordm-py@PyPI": ("https://pypi.python.org/pypi/inveniordm-py/"),
     },
 }
 

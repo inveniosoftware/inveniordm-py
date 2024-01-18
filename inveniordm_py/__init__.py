@@ -7,10 +7,8 @@
 
 """Invenio REST API client.."""
 
+from .client import InvenioAPI
 
 __version__ = "0.1.0"
 
 __all__ = ("__version__", "InvenioAPI")
-
-
-from .client import InvenioAPI

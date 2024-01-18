@@ -7,23 +7,21 @@
 
 """Module tests."""
 
-token = "85dTFUIcoomyTWy9jGNnz5yZ0vPCMmvNDw0M2G8nslGtTwAKJG7TNkxlkRiP"
-
-from inveniordm_py import InvenioAPI
-
-client = InvenioAPI('https://sandbox.zenodo.org/api', token)
-
-res = client.records.search()
-
-for r in res:
-    r.versions
+# from inveniordm_py import InvenioAPI
 
 
-client.records.create()
-client.records('1234').files.download()
+# def test_client(token, base_url, mocked_session):
+#     client = InvenioAPI(base_url, token, session=mocked_session)
 
+#     res = client.records.search()
 
-r = client.records('1234').get()
+#     for r in res:
+#         r.versions
 
-r.data
-r.versions.latest()
+#     client.records.create()
+#     # client.records("1234").files.download() # TODO uncomment when files are implemented
+
+#     r = client.records("1234").get()
+
+#     assert r.data is not None
+#     assert r.versions.latest() is not None

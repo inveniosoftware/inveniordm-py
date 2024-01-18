@@ -8,5 +8,3 @@
 Configuration
 =============
 
-.. automodule:: inveniordm_py.config
-   :members:
