@@ -8,11 +8,5 @@
 API Docs
 ========
 
-.. automodule:: inveniordm_py.ext
-   :members:
-
-Views
------
-
-.. automodule:: inveniordm_py.views
+.. automodule:: inveniordm_py.client
    :members:

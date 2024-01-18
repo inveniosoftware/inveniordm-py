@@ -7,27 +7,34 @@
 
 """Record metadata classes."""
 
-from ..metadata import ListMetadata, Metadata
+from inveniordm_py.metadata import ListMetadata, Metadata
 
 
 class RecordMetadata(Metadata):
-    accept = "application/vnd.inveniordm.v1+json"
-    content_type = "application/vnd.inveniordm.v1+json"
+    """Record metadata class."""
+
+    accept = "application/json"
 
     @property
     def endpoint_kwargs(self):
-        return {'id_': self._data['id']}
+        """Return endpoint kwargs.""" ""
+        return {"id_": self._data["id"]}
 
 
 class DraftMetadata(Metadata):
+    """Draft metadata class."""
+
     accept = "application/vnd.inveniordm.v1+json"
-    content_type = "application/vnd.inveniordm.v1+json"
+    content_type = "application/json"
 
     @property
     def endpoint_kwargs(self):
-        return {'id_': self._data['id']}
+        """Return endpoint kwargs.""" ""
+        return {"id_": self._data["id"]}
 
 
 class RecordListMetadata(ListMetadata):
+    """Record list metadata class."""
+
     accept = "application/vnd.inveniordm.v1+json"
     item_class = RecordMetadata
