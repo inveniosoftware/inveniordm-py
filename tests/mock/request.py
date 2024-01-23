@@ -20,3 +20,5 @@ class MockRequest(MagicMock):
         super().__init__(*args, **kwargs)
         self.headers = kwargs.get("headers") or {}
         self.data = kwargs.get("data") or {}
+        self.url = kwargs.get("url") or ""
+        self.method = kwargs.get("method") or ""

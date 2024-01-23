@@ -205,7 +205,7 @@ class RecordFilesList(Resource):
     endpoint = "/records/{id_}/files"
 
     def get(self):
-        """Get a files lsit"""
+        """Get a files list."""
         return self._get(FilesListMetadata)
 
     def __call__(self, key):
@@ -226,8 +226,10 @@ class RecordFile(Resource):
         return self._get(FileMetadata)
 
     def download(self):
-        """Download a file"""
-        return self._get_raw(IncomingStream, url_suffix="/content", params={"stream": True})
+        """Download a file."""
+        return self._get_raw(
+            IncomingStream, url_suffix="/content", params={"stream": True}
+        )
 
 
 class DraftFilesList(Resource):
@@ -283,11 +285,13 @@ class DraftFile(Resource):
         return self._post(FileMetadata, url_suffix="/commit")
 
     def download(self):
-        """Download a file"""
-        return self._get_raw(IncomingStream, url_suffix="/content", params={"stream": True})
+        """Download a file."""
+        return self._get_raw(
+            IncomingStream, url_suffix="/content", params={"stream": True}
+        )
 
     def delete(self):
-        """Delete a file"""
+        """Delete a file."""
         return self._delete()
 
     def get(self):

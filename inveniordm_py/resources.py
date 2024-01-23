@@ -150,9 +150,7 @@ class Resource:
     def _get_raw(self, metadata_class, url_suffix="", params=None, headers=None):
         headers = self.headers(accept=metadata_class, extra=headers)
         resp = self.session.get(
-            self.url(suffix=url_suffix),
-            headers=headers,
-            params=params
+            self.url(suffix=url_suffix), headers=headers, params=params
         )
         self.raise_on_error(resp)
         return resp

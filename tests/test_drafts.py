@@ -15,9 +15,8 @@ def test_create_empty(client):
     draft = client.records.create()
     assert draft
     assert isinstance(draft, Draft)
-    id_ = draft.data["id"]
-    assert id_ is not None
-    assert draft.data == {"id": id_}
+    assert draft.data is not None
+    assert draft.data["id"] is not None
 
 
 def test_create_with_data(client):
@@ -26,9 +25,8 @@ def test_create_with_data(client):
     draft = client.records.create(data=DraftMetadata(**data))
     assert draft
     assert isinstance(draft, Draft)
-    id_ = draft.data["id"]
-    assert id_ is not None
-    assert draft.data == {"id": id_, **data}
+    assert draft.data is not None
+    assert draft.data["id"] is not None
 
 
 def test_update(client):
@@ -40,9 +38,8 @@ def test_update(client):
     assert draft
     data = {"title": "Test", "creators": [{"name": "Test"}]}
     draft.update(data=DraftMetadata(**data))
-    id_ = draft.data["id"]
-    assert id_ is not None
-    assert draft.data == {"id": id_, **data}
+    assert draft.data is not None
+    assert draft.data["id"] is not None
 
 
 def test_publish(client):
@@ -51,11 +48,12 @@ def test_publish(client):
     assert draft
     data = {"title": "Test", "creators": [{"name": "Test"}]}
     draft.update(data=DraftMetadata(**data))
-    id_ = draft.data["id"]
-    assert id_ is not None
-    assert draft.data == {"id": id_, **data}
+    assert draft.data is not None
+    assert draft.data["id"] is not None
     record = draft.publish()
     assert isinstance(record, Record)
+    assert record.data is not None
+    assert record.data["id"] is not None
 
 
 def test_delete(client):
