@@ -29,14 +29,6 @@ def draft(client, minimal_record):
 
 
 @pytest.fixture(scope="module")
-def draft_with_files(draft, tmp_file):
-    """Create a draft with a file."""
-    file_meta = FilesListMetadata([{"key": tmp_file.name}])
-    draft.files.create(file_meta)
-    return draft
-
-
-@pytest.fixture(scope="module")
 def tmp_file():
     """Create a temporary file."""
     tempfile_ = tempfile.TemporaryFile()
