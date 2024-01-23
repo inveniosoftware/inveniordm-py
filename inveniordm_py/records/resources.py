@@ -9,7 +9,12 @@
 
 from functools import partial
 
-from inveniordm_py.files.metadata import FileMetadata, FilesListMetadata, Stream
+from inveniordm_py.files.metadata import (
+    FileMetadata,
+    FilesListMetadata,
+    IncomingStream,
+    OutgoingStream,
+)
 from inveniordm_py.records.metadata import (
     DraftMetadata,
     RecordListMetadata,
@@ -60,7 +65,7 @@ class Record(Resource):
     @property
     def files(self):
         """Record files."""
-        pass
+        return RecordFilesList(self._client, **self.endpoint_args)
 
     @property
     def access(self):
@@ -132,7 +137,7 @@ class Draft(Resource):
     @property
     def files(self):
         """Draft files."""
-        pass
+        return DraftFilesList(self._client, **self.endpoint_args)
 
     def import_files(self):
         """Run import files action."""
@@ -191,26 +196,100 @@ class RecordList(Resource):
         )
 
 
-# TODO implement files
-# class FilesList(Resource):
-#     endpoint = "/records/{id_}/files"
+class RecordFilesList(Resource):
+    """Implements a RecordFilesList as a Resource.
 
-#     def get(self):
-#         """Get a files lsit"""
-#         return self._get(FilesListMetadata)
+    This is the resource that is used to interact with the /api/records/{id_}/files endpoint.
+    """
 
-#     def __call__(self, key):
-#         """Instantiate a record item resource."""
-#         return File(self._client, id_=id_, key=key)
+    endpoint = "/records/{id_}/files"
+
+    def get(self):
+        """Get a files lsit"""
+        return self._get(FilesListMetadata)
+
+    def __call__(self, key):
+        """Instantiate a record item resource."""
+        return RecordFile(self._client, filename=key, **self._endpoint_args)
 
 
-# class File(Resource):
-#     endpoint = "/records/{id_}/files/{filename}"
+class RecordFile(Resource):
+    """Implements a RecordFile as a Resource.
 
-#     def get(self):
-#         """Get a files lsit"""
-#         return self._get(FileMetadata)
+    This is the resource that is used to interact with the /api/records/{id_}/files/{filename} endpoint.
+    """
 
-#     def download(self):
-#         """Download a file"""
-#         return self._get(Stream, url_suffix="/content")
+    endpoint = "/records/{id_}/files/{filename}"
+
+    def get(self):
+        """Get file metadata."""
+        return self._get(FileMetadata)
+
+    def download(self):
+        """Download a file"""
+        return self._get_raw(IncomingStream, url_suffix="/content", params={"stream": True})
+
+
+class DraftFilesList(Resource):
+    """Implements a DraftFilesList as a Resource.
+
+    This is the resource that is used to interact with the /api/records/{id_}/draft/files endpoint.
+    """
+
+    endpoint = "/records/{id_}/draft/files"
+
+    def get(self):
+        """Get all the files of the draft."""
+        return self._get(FilesListMetadata)
+
+    def create(self, data):
+        """Create a list of files in the draft."""
+        return self._post(FilesListMetadata, data=data)
+
+    def __call__(self, key):
+        """Instantiate a record item resource."""
+        return DraftFile(self._client, filename=key, **self._endpoint_args)
+
+    def __iter__(self):
+        """Iterate over files of the draft."""
+        self._it = iter(self.get().data["entries"])
+        return self
+
+    def __next__(self):
+        """Returns the next file in the draft, instantiated as a `DraftFile`."""
+        obj = next(self._it)
+        if not obj:
+            raise StopIteration
+        metadata = FileMetadata(**obj)
+        file = DraftFile(self._client, filename=metadata["key"], **self._endpoint_args)
+        file.data = metadata
+        return file
+
+
+class DraftFile(Resource):
+    """Implements a DraftFile as a Resource.
+
+    This is the resource that is used to interact with the /api/records/{id_}/draft/files/{filename} endpoint.
+    """
+
+    endpoint = "/records/{id_}/draft/files/{filename}"
+
+    def set_contents(self, stream):
+        """Set file contents."""
+        return self._put(OutgoingStream, data=stream, url_suffix="/content")
+
+    def commit(self):
+        """Commit one file."""
+        return self._post(FileMetadata, url_suffix="/commit")
+
+    def download(self):
+        """Download a file"""
+        return self._get_raw(IncomingStream, url_suffix="/content", params={"stream": True})
+
+    def delete(self):
+        """Delete a file"""
+        return self._delete()
+
+    def get(self):
+        """Get file information."""
+        return self._get(FileMetadata)
