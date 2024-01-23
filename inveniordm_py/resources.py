@@ -147,6 +147,16 @@ class Resource:
         resource.data = metadata_class.from_response(resp)
         return resource
 
+    def _get_raw(self, metadata_class, url_suffix="", params=None, headers=None):
+        headers = self.headers(accept=metadata_class, extra=headers)
+        resp = self.session.get(
+            self.url(suffix=url_suffix),
+            headers=headers,
+            params=params
+        )
+        self.raise_on_error(resp)
+        return resp
+
     def _delete(self, url_suffix="", headers=None):
         """Make a DELETE request."""
         headers = self.headers(extra=headers)
