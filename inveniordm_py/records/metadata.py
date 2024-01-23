@@ -14,6 +14,7 @@ class RecordMetadata(Metadata):
     """Record metadata class."""
 
     accept = "application/json"
+    content_type = "application/json"
 
     @property
     def endpoint_kwargs(self):
