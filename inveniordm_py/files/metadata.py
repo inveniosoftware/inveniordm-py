@@ -31,8 +31,12 @@ class FilesListMetadata(ListMetadata):
     item_class = FileMetadata
 
     def __init__(self, data=None, **kwargs):
-        # TODO for outgoing requests, we need to pass a top-level argument which is an array.
-        # TODO for incoming, we receive an object with a key "entries" which is an array.
+        """Initialize metadata object.
+
+        The data is either explicitely passed (i.e. top-level parameters) or taken from keyword arguments.
+
+        .. note:: this is a bit of a hack, but it works for now.
+        """
         if data:
             self._data = data
         if kwargs:
@@ -58,10 +62,20 @@ class Stream(FileMetadata):
 
 
 class OutgoingStream(Stream):
+    """Outgoing stream metadata.
+
+    This is used to upload a file.
+    """
+
     content_type = "application/octet-stream"
     accept = "application/json"
 
 
 class IncomingStream(Stream):
+    """Incoming stream metadata.
+
+    This is used to download a file.
+    """
+
     content_type = None
     accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*"

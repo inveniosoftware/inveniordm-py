@@ -6,14 +6,29 @@
 # it under the terms of the MIT License; see LICENSE file for more details.
 """Mock module of HTTP responses for inveniordm-py tests."""
 
-import json
+import re
 from unittest.mock import MagicMock
+
+from .handlers import DraftFileHandler, DraftFilesHandler, RecordsListHandler
 
 
 class MockResponse(MagicMock):
     """Mocked HTTP response.""" ""
 
+    HANDLERS = {
+        r"records/[0-9]+/draft/files": DraftFilesHandler,
+        r"records/[0-9]+/draft/files/filename": DraftFileHandler,
+        r"records": RecordsListHandler,
+    }
+
     request = None
+
+    def _match_handler(self, request):
+        for pattern, handler in self.HANDLERS.items():
+            endpoint = request.url.split("/", 3)[3]
+            if re.match(pattern, endpoint):
+                return handler()
+        raise ValueError(f"No handler found for endpoint {request.url}")
 
     @property
     def data(self):
@@ -29,15 +44,12 @@ class MockResponse(MagicMock):
         self.request = request
 
     def json(self):
-        """Return the data as a dict."""
-        if isinstance(self.data, dict):
-            dict_data = self.data
-        else:
-            dict_data = json.loads(self.data)
+        """Return the JSON response.
 
-        # Fake the draft/record id
-        dict_data.update({"id": 1})
-        return dict_data
+        The request is handled by the appropriate handler, which returns the data as a JSON.
+        """
+        match_handler = self._match_handler(self.request)
+        return match_handler.handle(self.request)
 
     def raise_for_status(self):
         """Mock function."""
