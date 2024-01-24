@@ -10,7 +10,7 @@ import tempfile
 
 import pytest
 
-from inveniordm_py.files.metadata import FilesListMetadata
+from inveniordm_py.files.metadata import FilesListMetadata, OutgoingStream
 from inveniordm_py.records.metadata import DraftMetadata
 from inveniordm_py.records.resources import DraftFile, DraftFilesList
 
@@ -56,12 +56,20 @@ def test_draft_files_iter(draft):
 #
 
 
-def test_draft_files_upload_workflow(draft):
-    pass
+def test_draft_files_upload_workflow(draft, tmp_file):
+    """Test uploading a file to a draft."""
+    file_meta = FilesListMetadata([{"key": tmp_file.name}])
+    draft.files.create(file_meta)
+    for f in draft.files:
+        f.set_contents(OutgoingStream(data=tmp_file))
+        assert f.commit() is not None
 
 
-def test_draft_files_delete(draft):
-    pass
+def test_draft_files_delete(draft, tmp_file):
+    """Test deleting a file from a draft."""
+    file_meta = FilesListMetadata([{"key": tmp_file.name}])
+    draft.files.create(file_meta)
+    assert draft.files(tmp_file.name).delete() is not None
 
 
 #
