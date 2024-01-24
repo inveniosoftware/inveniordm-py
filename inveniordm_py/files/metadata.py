@@ -78,4 +78,4 @@ class IncomingStream(Stream):
     """
 
     content_type = None
-    accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*"
+    accept = None
