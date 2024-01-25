@@ -17,6 +17,8 @@ from inveniordm_py.files.metadata import (
 )
 from inveniordm_py.records.metadata import (
     DraftMetadata,
+    RecordCommunitiesListMetadata,
+    RecordCommunityMetadata,
     RecordListMetadata,
     RecordMetadata,
 )
@@ -71,6 +73,11 @@ class Record(Resource):
     def access(self):
         """Record access."""
         pass
+
+    @property
+    def communities(self):
+        """Creates and returns a record communities API object."""
+        return RecordCommunitiesList(self._client, **self.endpoint_args)
 
 
 class RecordVersions(Resource):
@@ -297,3 +304,47 @@ class DraftFile(Resource):
     def get(self):
         """Get file information."""
         return self._get(FileMetadata)
+
+
+class RecordCommunitiesList(Resource):
+    """Implements a RecordCommunitiesList as a Resource.
+
+    This is the resource that is used to interact with the /api/records/{id_}/communities endpoint.s
+    """
+
+    endpoint = "/records/{id_}/communities"
+
+    def _normalize_data(self, data):
+        """Normalize data to a RecordCommunityMetadata object."""
+        if isinstance(data, RecordCommunityMetadata):
+            _data = data
+        elif isinstance(data, list):
+            _data = RecordCommunityMetadata(communities=data)
+        elif isinstance(data, str):
+            _data = RecordCommunityMetadata(communities=[data])
+        else:
+            raise ValueError(
+                "Data must be a list of communities, a single community id, or a RecordCommunityMetadata object."
+            )
+        return _data
+
+    def add(self, data):
+        """Add communities to a record.
+
+        The data is first normalized, allowing to pass a list of communities, a single community id, or a RecordCommunityMetadata object.
+
+        Usage:
+
+        .. code-block:: python
+
+            communities.add(["com1", "com2"])
+            communities.add("com1")
+            communities.add(RecordCommunityMetadata(communities=["com1", "com2"]))
+        """
+        _data = self._normalize_data(data)
+
+        return self._post(RecordCommunityMetadata, data=_data)
+
+    def search(self):
+        """Get record communities."""
+        return self._get(RecordCommunitiesListMetadata)
