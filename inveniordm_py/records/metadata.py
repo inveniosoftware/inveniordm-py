@@ -45,7 +45,7 @@ class RecordListMetadata(ListMetadata):
 class RecordCommunityMetadata(Metadata):
     """Record community metadata class."""
 
-    accept = "application/vnd.inveniordm.v1+json"
+    accept = "application/json"
     content_type = "application/json"
 
     def _serialize_data(self):
