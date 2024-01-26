@@ -70,6 +70,10 @@ class OutgoingStream(Stream):
     content_type = "application/octet-stream"
     accept = "application/json"
 
+    def to_request(self):
+        """Return the stream data."""
+        return self._data.get("data", None)
+
 
 class IncomingStream(Stream):
     """Incoming stream metadata.
