@@ -20,9 +20,6 @@
 .. image:: https://img.shields.io/github/license/inveniosoftware/inveniordm-py.svg
         :target: https://github.com/inveniosoftware/inveniordm-py/blob/master/LICENSE
 
-Invenio REST API client.
+InvenioRDM REST API client.
 
-TODO: Please provide feature overview of module
-
-Further documentation is available on
-https://inveniordm-py.readthedocs.io/
+Documentation not yet available.
