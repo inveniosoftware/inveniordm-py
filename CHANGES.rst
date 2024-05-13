@@ -7,6 +7,6 @@
 Changes
 =======
 
-Version 0.1.0 (released TBD)
+Version 0.1.0 (2024-05-13)
 
-- Initial public release.
+- Initial public alpha release.
