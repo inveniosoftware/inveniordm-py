@@ -34,7 +34,7 @@ Here's a basic example of how to use `inveniordm-py`:
     from inveniordm_py.client import InvenioAPI
 
     # Initialize client
-    client = InvenioAPI('https://your-invenio-instance.com', 'your-token')
+    client = InvenioAPI('https://your-invenio-instance.com/api', 'your-token')
 
     # Get a list of all records
     records = client.records.search()
@@ -65,7 +65,7 @@ The client supports creating and updating drafts:
             "publisher": "Zenodo"
         }
     }
-    draft = client.records.create(data=DraftMetadata(data))
+    draft = client.records.create(data=DraftMetadata(**data))
 
     # Update metadata and draft
     data.update({
@@ -73,7 +73,7 @@ The client supports creating and updating drafts:
             "title": "Test 2",
         }
     })
-    draft.update(data=DraftMetadata(data))
+    draft.update(data=DraftMetadata(**data))
 
 Files can be added to the draft:
 
