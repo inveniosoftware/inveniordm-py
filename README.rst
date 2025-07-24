@@ -75,7 +75,7 @@ Individual files can be added to the draft:
 
 .. code-block:: python
 
-   from inveniordm_py.files.metadata import OutgoingStream, FilesListMetadata
+    from inveniordm_py.files.metadata import OutgoingStream, FilesListMetadata
     from pathlib import Path
     
     # Create a single file metadata and add it to the draft using a stream
