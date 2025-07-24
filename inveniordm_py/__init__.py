@@ -9,6 +9,6 @@
 
 from .client import InvenioAPI
 
-__version__ = "0.1.1"
+__version__ = "0.1.2-alpha"
 
 __all__ = ("__version__", "InvenioAPI")
