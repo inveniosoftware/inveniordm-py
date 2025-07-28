@@ -29,6 +29,17 @@ def test_create_with_data(client):
     assert draft.data["id"] is not None
 
 
+def test_new_version_endpoints(client):
+    """Test endpoints for new versions are set correctly"""
+
+    # Create record with non-default id_
+    record = Record(client=client, id_="101")
+    draft = record.new_version()
+
+    # ensure response data id_ has priority over parent resource id_
+    assert draft.endpoint_args["id_"] != record.endpoint_args["id_"]
+
+
 def test_update(client):
     """Test case for updating a draft.
 
