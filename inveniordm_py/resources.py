@@ -43,10 +43,11 @@ class Resource:
         """Get endpoint arguments.
 
         Arguments are computed from the data and the resource.
-        Precedence is given to the resource endpoint kwargs.
+        Precedence is given to the data returned from the API call, as 
+        the resource endpoint kwargs are in some cases already set before the API call
         """
         if isinstance(self.data, Metadata):
-            return {**self.data.endpoint_kwargs, **self._endpoint_args}
+            return {**self._endpoint_args, **self.data.endpoint_kwargs}
         return self._endpoint_args
 
     @data.setter
