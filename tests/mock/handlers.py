@@ -424,4 +424,3 @@ class CommunityListHandler(Handler):
         Returns the base response with the metadata.
         """
         return {**self.base, "metadata": self.meta}
-

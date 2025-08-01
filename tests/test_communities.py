@@ -50,7 +50,7 @@ def test_update(client):
 
 
 def test_community_record(client):
-    """ Test case for community records"""
+    """Test case for community records"""
     community = client.communities.create()
     assert community
     records = community.records
