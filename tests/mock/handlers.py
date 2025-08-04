@@ -334,3 +334,93 @@ class DraftHandler(Handler):
             "updated": "2020-11-27 10:52:23.969244",
             "versions": {"index": 1, "is_latest": False, "is_latest_draft": True},
         }
+
+
+class CommunityListHandler(Handler):
+    """Handler for community list."""
+
+    def _handle_get(self, request):
+        """Handle GET requests (i.e. list all communities)."""
+        return {
+            "aggregations": {...},
+            "hits": {
+                "hits": [
+                    {
+                        "metadata": {
+                            "title": "My Updated Community",
+                            "description": "This is an example Community.",
+                            "type": {"id": "event"},
+                            "curation_policy": "This is the kind of records we accept.",
+                            "page": "Information for my community.",
+                            "website": "https://inveniosoftware.org/",
+                            "organizations": [{"name": "CERN"}],
+                        }
+                    }
+                ],
+                "total": 1,
+            },
+            "links": {...},
+            "sortBy": ...,
+        }
+
+    @property
+    def base(self):
+        """Base response, does not contain metadata."""
+        return {
+            "access": {
+                "visibility": "public",
+                "member_policy": "open",
+                "record_policy": "open",
+            },
+            "created": "2020-11-27 10:52:23.945755",
+            "updated": "2020-11-27 10:55:23.945868",
+            "slug": "my_community_identifier",
+            "id": "399a3cdc-d2ba-4f63-8b3a-9c2c977a5dd3",
+            "revision_id": 2,
+            "links": {
+                "self": "{scheme+hostname}/api/communities/{id}",
+                "self_html": "{scheme+hostname}/communities/{id}",
+                "settings_html": "{scheme+hostname}/communities/{id}/settings",
+                "logo": "{scheme+hostname}/communities/{id}/logo",
+                "rename": "{scheme+hostname}/communities/{id}",
+                "members": "{scheme+hostname}/communities/{id}/members",
+                "public_members": "{scheme+hostname}/communities/{id}/members/public",
+                "invitations": "{scheme+hostname}/communities/{id}/invitations",
+                "requests": "{scheme+hostname}/communities/{id}/requests",
+            },
+        }
+
+    @property
+    def meta(self):
+        """Metadata response for the record."""
+        return {
+            "title": "My Updated Community",
+            "description": "This is an example Community.",
+            "type": {"id": "event"},
+            "curation_policy": "This is the kind of records we accept.",
+            "page": "Information for my community.",
+            "website": "https://inveniosoftware.org/",
+            "organizations": [{"name": "CERN"}],
+        }
+
+    def _handle_post(self, request):
+        """Handle POST requests (i.e. create new community).
+
+        If the request is empty, return the base response (e.g. a new empty community).
+        Otherwise, return the base response with the metadata (e.g. a new community with metadata).
+        """
+        if request.data == {}:
+            return self.base
+
+        return {**self.base, "metadata": self.meta}
+
+    def _handle_delete(self, request):
+        """Handle DELETE requests."""
+        return {}
+
+    def _handle_put(self, request):
+        """Handle PUT requests (i.e. update a draft).
+
+        Returns the base response with the metadata.
+        """
+        return {**self.base, "metadata": self.meta}
