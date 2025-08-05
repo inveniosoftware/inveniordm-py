@@ -34,7 +34,7 @@ Here's a basic example of how to use `inveniordm-py`:
     from inveniordm_py.client import InvenioAPI
 
     # Initialize client
-    client = InvenioAPI('https://your-invenio-instance.com', 'your-token')
+    client = InvenioAPI('https://your-invenio-instance.com/api', 'your-token')
 
     # Get a list of all records
     records = client.records.search()
@@ -44,7 +44,7 @@ The client supports creating and updating drafts:
 .. code-block:: python
 
     from inveniordm_py.records.metadata import DraftMetadata
-
+    
     # Create a draft with metadata
     data = {
         "metadata": {
@@ -65,43 +65,50 @@ The client supports creating and updating drafts:
             "publisher": "Zenodo"
         }
     }
-    draft = client.records.create(data=DraftMetadata(data))
-
+    draft = client.records.create(data=DraftMetadata(**data))
+    
     # Update metadata and draft
-    data.update({
-        "metadata": {
-            "title": "Test 2",
-        }
-    })
-    draft.update(data=DraftMetadata(data))
+    data["metadata"]["title"] = "Test 2"
+    draft.update(data=DraftMetadata(**data))
 
-Files can be added to the draft:
+Individual files can be added to the draft:
 
 .. code-block:: python
 
-    from inveniordm_py.files.metadata import FileMetadata, OutgoingStream, FileMetadata
-
-    # Define files metadata
-    fname = "test.txt"
-    fpath = "/path/to/test.txt"
-    file_data = FileMetadata({"key": fname})
-
-    # Create the file and add it to the draft using a stream
+    from inveniordm_py.files.metadata import OutgoingStream, FilesListMetadata
+    from pathlib import Path
+    
+    # Create a single file metadata and add it to the draft using a stream
+    demo_file = Path("inveniordm_py_demo_file.txt")
+    demo_file.write_text(f"This is demo file content.")
+    file_data = FilesListMetadata([{"key": demo_file.name}])
     draft.files.create(file_data)
-    stream = open(fpath, "rb")
-    f.set_contents(OutgoingStream(data=stream))
-    f.commit()
+    draft_file = list(draft.files)[0]
+    with demo_file.open() as stream:
+        draft_file.set_contents(OutgoingStream(data=stream))
+        draft_file.commit()
+    
+    # cleanup draft by deleting single demo file
+    list(draft.files)[0].delete()
 
-    # It also supports the addition of multiple files from disk
-    _dir = "/path/to/dir"
-    file_data = FilesListMetadata([{"key": fname} for fname in os.listdir(_dir)])
+Alternatively, multiple files can be added to the draft:
+
+.. code-block:: python
+
+    # Create local set of demo files to be uploaded
+    demo_dir = Path("inveniordm_py_demo_directory")
+    demo_dir.mkdir(parents=True, exist_ok=True)
+    for i in range(3):
+        file_path = demo_dir / f"dataset_{i}.txt"
+        file_path.write_text(f"Content of demo file #{i}.")
+    
+    # Create a multi-file metadata and add it to the draft using a stream
+    file_data = FilesListMetadata([{"key": fpath.name} for fpath in sorted(demo_dir.glob("*"))])
     draft.files.create(file_data)
     for f in draft.files:
-        file_path = os.path.join(_dir, f.data['key'])
-        stream = open(file_path, "rb")
-        f.set_contents(OutgoingStream(data=stream))
-        f.commit()
-
+        with (demo_dir / f.data["key"]).open() as stream:
+            f.set_contents(OutgoingStream(data=stream))
+            f.commit()
 
 Finally, the draft can be published:
 
@@ -109,4 +116,4 @@ Finally, the draft can be published:
 
     # Publish the draft and check the status
     record = draft.publish()
-    print(record.data["status"])
+    print(f"Record status: {record.data['status']}")
