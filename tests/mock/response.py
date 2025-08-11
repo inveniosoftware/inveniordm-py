@@ -9,7 +9,12 @@
 import re
 from unittest.mock import MagicMock
 
-from .handlers import DraftFileHandler, DraftFilesHandler, RecordsListHandler
+from .handlers import (
+    CommunityListHandler,
+    DraftFileHandler,
+    DraftFilesHandler,
+    RecordsListHandler,
+)
 
 
 class MockResponse(MagicMock):
@@ -19,6 +24,7 @@ class MockResponse(MagicMock):
         r"records/[0-9]+/draft/files": DraftFilesHandler,
         r"records/[0-9]+/draft/files/filename": DraftFileHandler,
         r"records": RecordsListHandler,
+        r"communities": CommunityListHandler,
     }
 
     request = None

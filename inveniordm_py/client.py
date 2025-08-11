@@ -11,6 +11,7 @@ import atexit
 
 from requests import Session
 
+from .communities.community import CommunityList
 from .records.resources import RecordList
 
 
@@ -32,3 +33,8 @@ class InvenioAPI:
     def records(self):
         """Get a record list resource."""
         return RecordList(client=self)
+
+    @property
+    def communities(self):
+        """Get a community list resource."""
+        return CommunityList(client=self)
