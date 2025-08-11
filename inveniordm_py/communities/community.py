@@ -25,25 +25,21 @@ class Community(Resource):
 
     endpoint = "/communities/{id_}"
 
-    def get(self):
-        """Get a record."""
-        return self._get(CommunityMetadata)
-
     def create(self, data=None):
-        """Create new draft."""
+        """Create new community."""
         return self._post(CommunityMetadata, data=data, resource=self)
 
     def update(self, data=None):
-        """Create a draft from a published record (shortcut)."""
+        """Update a community"""
         return self._put(CommunityMetadata, data=data, resource=self)
 
     def delete(self):
         """Delete community."""
         return self._delete()
 
-    def get(self, data=None):
+    def get(self):
         """Get community metadata."""
-        self._get(CommunityMetadata, data=data)
+        self._get(CommunityMetadata)
 
     @property
     def records(self):
@@ -59,19 +55,19 @@ class CommunityList(Resource):
 
     endpoint = "/communities"
 
-    def get(self):
-        """Get all the files of the draft."""
+    def get(self) -> CommunityListMetadata:
+        """Get all data of the community list."""
         return self._get(CommunityListMetadata)
 
-    def __call__(self, id_):
+    def __call__(self, id_) -> Community:
         """Instantiate a community item resource."""
         return Community(self._client, id_=id_)
 
-    def _new(self):
+    def _new(self) -> Community:
         """Creates and returns a community API object."""
         return Community(self._client, **self.endpoint_args)
 
-    def create(self, data=None):
+    def create(self, data=None) -> CommunityMetadata:
         """Create new community."""
         return self._post(CommunityMetadata, data=data, resource=self._new())
 
