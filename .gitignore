@@ -2,8 +2,13 @@
 __pycache__/
 *.py[cod]
 
-# Idea software family
+# IDEs
 .idea/
+.vscode/
+
+# environments
+.venv/
+venv/
 
 # C extensions
 *.so
@@ -63,3 +68,7 @@ target/
 
 # Vim swapfiles
 .*.sw?
+
+# Demo files
+inveniordm_py_demo_directory/
+inveniordm_py_demo_file.txt
