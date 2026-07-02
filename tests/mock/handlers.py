@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: MIT
 """Mock request handlers."""
 
-
 import json
 from abc import ABC, abstractmethod
 

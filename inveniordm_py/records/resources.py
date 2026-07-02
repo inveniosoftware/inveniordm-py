@@ -3,8 +3,6 @@
 
 """Record resources."""
 
-from functools import partial
-
 from inveniordm_py.files.metadata import (
     FileMetadata,
     FilesListMetadata,

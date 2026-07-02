@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """Record metadata classes."""
+
 import json
 
 from inveniordm_py.metadata import ListMetadata, Metadata
