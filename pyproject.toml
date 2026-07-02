@@ -1,0 +1,58 @@
+# SPDX-FileCopyrightText: 2024 CERN.
+# SPDX-FileCopyrightText: 2026 TU Wien.
+# SPDX-License-Identifier: MIT
+
+[project]
+name = "inveniordm-py"
+description = "Invenio REST API client."
+readme = "README.rst"
+requires-python = ">=3.7"
+license = "MIT"
+authors = [
+  { name = "CERN", email = "info@inveniosoftware.org" },
+]
+keywords = [
+  "api",
+  "invenio",
+  "rest",
+]
+classifiers = [
+  "Development Status :: 1 - Planning",
+]
+dependencies = [
+  "requests>=2.8",
+]
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/inveniosoftware/inveniordm-py"
+
+[project.optional-dependencies]
+tests = [
+  "pytest-black>=0.3.0",
+  "pytest-invenio>=3.0.0,<4.0.0",
+  "sphinx>=4.5.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "inveniordm_py/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/inveniordm_py",
+]
+
+[tool.isort]
+profile = "black"
+
+[tool.pydocstyle]
+add_ignore = "D401"
+
+[tool.pytest.ini_options]
+addopts = '--black --isort --pydocstyle --doctest-glob="*.rst" --doctest-modules --cov=inveniordm_py --cov-report=term-missing'
+testpaths = "tests inveniordm_py"
+live_server_scope = "module"

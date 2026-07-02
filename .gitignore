@@ -27,7 +27,7 @@ var/
 *.egg
 Pipfile
 Pipfile.lock
-pyproject.toml
+uv.lock
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
